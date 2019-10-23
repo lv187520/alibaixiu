@@ -10,7 +10,6 @@ $('#userForm').on('submit', function () {
         },
         error: function (res) {
             console.log(res);
-
             alert('添加失败')
         }
     })
@@ -66,6 +65,20 @@ $("#userBox").on('click', '.edit', function () {
         }
     })
 })
+$("#userBox").on('click', '.delUser', function () {
+    var id = $(this).attr('data-id');
+    var isConfirm = confirm('您真的要删除么？');
+    if (isConfirm) {
+        $.ajax({
+            url: '/users/' + id,
+            type: 'delete',
+            success: function (res) {
+                // console.log(res);
+                location.reload();
+            }
+        })
+    }
+})
 
 $('#modifyBox').on('submit', '#modifyUser', function () {
     var id = $(this).attr('data-id');
@@ -80,4 +93,47 @@ $('#modifyBox').on('submit', '#modifyUser', function () {
     })
 
     return false;
+})
+
+$('#all').on('click', function () {
+    $('#userBox input').prop('checked', $(this).prop('checked'));
+    if ($('#all').prop('checked')) {
+        $('#delbtn').css('display', 'inline-block');
+    } else {
+        $('#delbtn').css('display', 'none');
+    }
+})
+$('#userBox').on('click', 'input', function () {
+    if ($("#userBox input").length == $('#userBox input:checked').length) {
+        $('#all').prop('checked', true);
+    } else {
+        $('#all').prop('checked', false);
+    }
+    if ($('#userBox input:checked').length) {
+        $('#delbtn').css('display', 'inline-block');
+    } else {
+        $('#delbtn').css('display', 'none');
+    }
+})
+$('#delbtn').on('click', function () {
+    //value是一个DOM对象
+    var params = '';
+    $('#userBox input:checked').each(function (index, value) {
+        params += $(value).attr('data-id')+'-';
+        // console.log($(value).attr('data-id'));
+    })
+    
+    if(params){
+        params=params.substr(0,params.length-1);
+    }
+    var isConfirm = confirm('您真的要删除么？');
+    if(isConfirm){
+        $.ajax({
+            type:'delete',
+            url:'/users/'+params,
+            success:function(res){
+                location.reload();
+            }
+        })
+    }
 })
