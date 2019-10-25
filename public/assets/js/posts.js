@@ -4,8 +4,15 @@ $.ajax({
     success: function (res) {
         var html = template('aticlelist', res);
         $("#aticlebody").html(html);
-        var page = template('pagelist', res);
-        $("#page-list").html(page);
+        // var page = template('pagelist', res);
+        // $("#page-list").html(page);
+        $('#page-list').twbsPagination({
+            totalPages: res.pages,
+            visiblePages: 3,
+            onPageClick: function (event, page) {
+                changePage(page);
+            }
+        });
     }
 })
 
@@ -19,8 +26,8 @@ function changePage(page) {
         success: function (res) {
             var html = template('aticlelist', res);
             $("#aticlebody").html(html);
-            var page = template('pagelist', res);
-            $("#page-list").html(page);
+            // var page = template('pagelist', res);
+            // $("#page-list").html(page);
         }
     })
 }
@@ -37,7 +44,7 @@ $.ajax({
 $("#shaixuan").on('submit', function () {
     var formdata = $(this).serialize();
     console.log(formdata);
-    
+
     $.ajax({
         url: '/posts',
         type: 'get',

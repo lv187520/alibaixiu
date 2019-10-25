@@ -20,7 +20,7 @@ $("#feature").on('change',function(){
         contentType: false,
         success:function(res){
             $("#pic").attr('src',res[0].cover).show();
-            $("#picsrc").val(res[0].cover);
+            $("#pic").val(res[0].cover);
         }
     })
 })
